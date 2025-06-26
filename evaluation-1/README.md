@@ -13,7 +13,7 @@ rôle Ansible propre, maintenable et idempotent, puis de le publier sur Ansible 
 
 ## Objectif de la mission 
 
-1. Créer un rôle Ansible complet à partir du script install_wordpress.sh. 
+1. Créer un rôle Ansible complet à partir du script [install_wordpress.sh](Install_wordpress.sh). 
 
 2. S’assurer qu’il fonctionne aussi bien sur Ubuntu que Rocky Linux. 
 
