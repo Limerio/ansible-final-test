@@ -37,6 +37,14 @@
   ansible.builtin.include_tasks: configure-wordpress.yml
 
 - name: Restart Apache
-  ansible.builtin.service:
-    name: "{{ wordpress_httpd_service }}"
-    state: restarted
+  block:
+    - name: Restart Apache via systemd/service
+      ansible.builtin.service:
+        name: "{{ wordpress_httpd_service }}"
+        state: restarted
+  rescue:
+    - name: Restart Apache daemon (Rocky/RHEL container without systemd)
+      when: ansible_facts['os_family'] == 'RedHat'
+      ansible.builtin.command: /usr/sbin/apachectl restart
+      changed_when: true
+      failed_when: false

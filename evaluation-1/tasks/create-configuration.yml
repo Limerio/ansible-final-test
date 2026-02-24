@@ -1,28 +1,12 @@
-- name: Copy configuration file
-  ansible.builtin.copy:
-    src: wp-config-sample.php
-    dest: /var/www/html/wp-config.php
+- name: Create WordPress configuration from template
+  ansible.builtin.template:
+    src: wp-config.php.j2
+    dest: "{{ wordpress_install_dir }}/wordpress/wp-config.php"
     mode: "0644"
-
-# Update configuration file
-- name: Update configuration file
-  ansible.builtin.lineinfile:
-    path: /var/www/html/wp-config.php
-    line: "define( 'DB_NAME', '{{ wordpress_db_name }}' );"
-    state: present
-  with_items:
-    - "define( 'DB_USER', '{{ wordpress_db_user }}' );"
-    - "define( 'DB_PASSWORD', '{{ wordpress_db_password }}' );"
-    - "define( 'DB_HOST', 'localhost' );"
 
 - name: Change ownership of configuration file
   ansible.builtin.file:
-    path: /var/www/html/wp-config.php
-    owner: www-data
-    group: www-data
-    mode: "0640"
-
-- name: Change permissions of configuration file
-  ansible.builtin.file:
-    path: /var/www/html/wp-config.php
+    path: "{{ wordpress_install_dir }}/wordpress/wp-config.php"
+    owner: "{{ wordpress_web_user }}"
+    group: "{{ wordpress_web_group }}"
     mode: "0640"
