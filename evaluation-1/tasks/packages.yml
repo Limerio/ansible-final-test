@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Install WordPress and HTTPD packages (Debian)
+  ansible.builtin.apt:
+    name: "{{ wordpress_httpd_packages + wordpress_php_packages + wordpress_extra_packages + [mariadb_package] }}"
+    state: present
+  when: ansible_facts["os_family"] == 'Debian'
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Install WordPress and HTTPD packages (RedHat)
+  ansible.builtin.dnf:
+    name: "{{ wordpress_httpd_packages + wordpress_extra_packages + [mariadb_package] }}"
+    state: present
+  when: ansible_facts["os_family"] == 'RedHat'

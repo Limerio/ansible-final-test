@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+---
+# Ubuntu / Debian
+wordpress_httpd_packages:
+  - apache2
+  - libapache2-mod-php
+wordpress_php_packages:
+  - php
+  - php-mysql
+wordpress_httpd_service: apache2
+wordpress_httpd_conf_path: /etc/apache2/sites-available
+wordpress_httpd_conf_d_path: /etc/apache2/sites-enabled
+wordpress_httpd_mods_path: /etc/apache2/mods-enabled
+wordpress_httpd_vhost_filename: wordpress.conf
+wordpress_web_user: www-data
+wordpress_web_group: www-data
+wordpress_httpd_bin: /usr/sbin/apache2
+wordpress_httpd_use_sites: true
+wordpress_httpd_mod_rewrite: rewrite
+wordpress_log_dir: "{{ apache_log_dir | default('/var/log/apache2') }}"
+wordpress_extra_packages:
+  - wget
+  - unzip
+mariadb_package: mariadb-server
+mariadb_service: mariadb

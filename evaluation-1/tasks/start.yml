@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Start Apache
+  ansible.builtin.service:
+    name: "{{ wordpress_httpd_service }}"
+    state: started
+
+- name: Start MariaDB (RedHat - try systemd, fallback for container without systemd)
+  when: ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: Start MariaDB via systemd
+      ansible.builtin.service:
+        name: "{{ mariadb_service }}"
+        state: started
+  rescue:
+    - name: Start MariaDB daemon (container without systemd)
+      ansible.builtin.command: /usr/sbin/mariadbd --user=mysql --daemonize
+      changed_when: true
+      failed_when: false

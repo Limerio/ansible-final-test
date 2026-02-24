@@ -2,7 +2,7 @@
 set -e  # Arrêter le script si une commande échoue 
 echo " Mise à jour du conteneur..." 
 apt update -y && 
- 
+
 echo " Installation des paquets nécessaires..." 
 DEBIAN_FRONTEND=noninteractive apt install -y apache2 php 
 libapache2-mod-php php-mysql mariadb-server wget unzip 

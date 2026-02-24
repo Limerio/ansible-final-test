@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Load default variables
+  ansible.builtin.include_vars: defaults/main.yml
+
+- name: Load OS-specific variables
+  ansible.builtin.include_vars: "vars/{{ ansible_facts['os_family'] }}.yml"
+
+- name: Include preparation tasks
+  ansible.builtin.include_tasks: prep.yml
+
+- name: Include package installation
+  ansible.builtin.include_tasks: packages.yml
+
+- name: Clean up
+  ansible.builtin.include_tasks: clean-up.yml
+
+- name: Start Apache and MariaDB
+  ansible.builtin.include_tasks: start.yml
+
+- name: Wait for the MariaDB to startup
+  command: sleep 10
+
+- name: Secure MariaDB
+  ansible.builtin.include_tasks: secure-mariadb.yml
+
+- name: Create WordPress database
+  ansible.builtin.include_tasks: create-database.yml
+
+- name: Download WordPress
+  ansible.builtin.include_tasks: download-wordpress.yml
+
+- name: Create WordPress configuration
+  ansible.builtin.include_tasks: create-configuration.yml
+
+- name: Configure WordPress
+  ansible.builtin.include_tasks: configure-wordpress.yml
+
+- name: Restart Apache
+  ansible.builtin.service:
+    name: "{{ wordpress_httpd_service }}"
+    state: restarted

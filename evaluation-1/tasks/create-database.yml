@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Create WordPress database
+  command: mysql -uroot -p{{ mysql_root_password }} -e "CREATE DATABASE IF NOT EXISTS wordpress;"
+
+- name: Create WordPress user
+  command: mysql -uroot -p{{ mysql_root_password }} -e "CREATE USER IF NOT EXISTS '{{ wordpress_db_user }}'@'localhost' IDENTIFIED BY '{{ wordpress_db_password }}';"
+
+- name: Grant privileges to WordPress user
+  command: mysql -uroot -p{{ mysql_root_password }} -e "GRANT ALL PRIVILEGES ON wordpress.* TO '{{ wordpress_db_user }}'@'localhost';"
+
+- name: Flush privileges
+  command: mysql -uroot -p{{ mysql_root_password }} -e "FLUSH PRIVILEGES;"

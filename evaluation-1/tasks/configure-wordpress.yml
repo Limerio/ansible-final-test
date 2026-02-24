@@ -1,0 +1,11 @@
+- name: Configure WordPress
+  ansible.builtin.template:
+    src: wordpress-vhost.conf.j2
+    dest: /etc/apache2/sites-available/wordpress.conf
+    mode: "0644"
+
+- name: Enable WordPress vhost
+  ansible.builtin.file:
+    path: /etc/apache2/sites-enabled/wordpress.conf
+    state: link
+    target: /etc/apache2/sites-available/wordpress.conf

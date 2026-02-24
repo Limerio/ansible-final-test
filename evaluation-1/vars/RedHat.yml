@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: MIT
+---
+wordpress_httpd_packages:
+  - httpd
+  - php
+  - php-mysqlnd
+wordpress_php_packages: []
+wordpress_httpd_service: httpd
+wordpress_httpd_conf_path: /etc/httpd/conf.d
+wordpress_httpd_conf_d_path: /etc/httpd/conf.d
+wordpress_httpd_mods_path: /etc/httpd/conf.modules.d
+wordpress_httpd_vhost_filename: wordpress.conf
+wordpress_web_user: apache
+wordpress_web_group: apache
+wordpress_httpd_bin: /usr/sbin/httpd
+wordpress_httpd_use_sites: false
+wordpress_httpd_mod_rewrite: rewrite
+wordpress_log_dir: /var/log/httpd
+wordpress_extra_packages:
+  - wget
+  - unzip
+mariadb_package: mariadb-server
+mariadb_service: mariadb
