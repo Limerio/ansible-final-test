@@ -18,8 +18,13 @@
 - name: Start Apache and MariaDB
   ansible.builtin.include_tasks: start.yml
 
-- name: Wait for the MariaDB to startup
-  command: sleep 10
+- name: Wait for MariaDB to accept connections
+  ansible.builtin.wait_for:
+    port: 3306
+    host: 127.0.0.1
+    delay: 2
+    timeout: 60
+    state: started
 
 - name: Secure MariaDB
   ansible.builtin.include_tasks: secure-mariadb.yml

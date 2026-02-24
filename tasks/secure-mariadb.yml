@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: MIT
+# Use -h 127.0.0.1 so connection works on Rocky/RHEL containers where socket path may differ or appear later
+---
+- name: Change the root password (try with current password for idempotency)
+  ansible.builtin.command:
+    cmd: mysql -h 127.0.0.1 -uroot -p{{ mysql_root_password }} -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  register: root_pw_set
+  failed_when: false
+
+- name: Change the root password (first run – no password set yet)
+  ansible.builtin.command:
+    cmd: mysql -h 127.0.0.1 -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  when: root_pw_set is failed
+
+- name: Delete anonymous users
+  ansible.builtin.command: mysql -h 127.0.0.1 -uroot -p{{ mysql_root_password }} -e "DELETE FROM mysql.user WHERE User='';"
+
+- name: Delete test database
+  ansible.builtin.shell: |
+    mysql -h 127.0.0.1 -uroot -p{{ mysql_root_password }} -e "DROP DATABASE IF EXISTS test;"
+    mysql -h 127.0.0.1 -uroot -p{{ mysql_root_password }} -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+
+- name: Flush privileges
+  ansible.builtin.command: mysql -h 127.0.0.1 -uroot -p{{ mysql_root_password }} -e "FLUSH PRIVILEGES;"
